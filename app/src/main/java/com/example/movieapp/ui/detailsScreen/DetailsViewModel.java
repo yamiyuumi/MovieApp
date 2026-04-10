@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.movieapp.domain.models.MovieDetailsWithReviewsUi;
+import com.example.movieapp.domain.models.MovieUi;
 import com.example.movieapp.domain.usecase.DetailsUseCase;
+import com.example.movieapp.domain.usecase.GetMoviesUseCase;
 
 import javax.inject.Inject;
 
@@ -20,6 +22,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class DetailsViewModel extends ViewModel {
 
     private final DetailsUseCase detailsUseCase;
+    private final GetMoviesUseCase getMoviesUseCase;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     private final MutableLiveData<MovieDetailsWithReviewsUi> _movieDetails = new MutableLiveData<>();
@@ -32,8 +35,9 @@ public class DetailsViewModel extends ViewModel {
     public final LiveData<String> error = _error;
 
     @Inject
-    public DetailsViewModel(DetailsUseCase detailsUseCase) {
+    public DetailsViewModel(DetailsUseCase detailsUseCase, GetMoviesUseCase getMoviesUseCase) {
         this.detailsUseCase = detailsUseCase;
+        this.getMoviesUseCase = getMoviesUseCase;
     }
 
     public void fetchMovieDetailsWithReviews(int movieId) {
@@ -55,7 +59,17 @@ public class DetailsViewModel extends ViewModel {
                         )
         );
     }
-
+    public void toggleFavorite(int movieId) {
+        disposables.add(
+                getMoviesUseCase.toggleFavorite(movieId)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> { /* success — LiveData re-emits automatically */ },
+                                err -> _error.setValue("Toggle failed: " + err.getMessage())
+                        )
+        );
+    }
     @Override
     protected void onCleared() {
         disposables.clear();

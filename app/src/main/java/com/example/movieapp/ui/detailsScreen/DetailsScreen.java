@@ -24,6 +24,7 @@ import com.example.movieapp.databinding.DetailsLayoutBinding;
 import com.example.movieapp.domain.models.CastUi;
 import com.example.movieapp.domain.models.GenreUi;
 import com.example.movieapp.domain.models.MovieDetailsWithReviewsUi;
+import com.example.movieapp.domain.models.MovieUi;
 import com.example.movieapp.domain.models.ReviewsUi;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -77,6 +78,9 @@ public class DetailsScreen extends Fragment {
         }
 
         observeViewModel();
+        binding.backButton.setOnClickListener(view1 -> {
+            Navigation.findNavController(binding.getRoot()).navigateUp();
+        });
     }
 
     private void observeViewModel() {
@@ -111,12 +115,6 @@ public class DetailsScreen extends Fragment {
             genreNames.add(genre.getName());
         }
 
-//        List<String> reviews = new ArrayList<>();
-//        for (ReviewsUi review : data.getReviews().getAuthor()) {
-//            reviews.add(review.getAuthor());
-//        }
-
-
         List<String> castNames = new ArrayList<>();
         int max = Math.min(data.getCredits().size(), 10);
 
@@ -133,8 +131,6 @@ public class DetailsScreen extends Fragment {
 
         binding.movieRating.setRating((float) (data.getMovieDetails().getVoteAverage() / 2));
 
-//        binding.movieRuntime.setText(data.getMovieDetails().getRuntime());
-
         int runtime = data.getMovieDetails().getRuntime();
         int hours = runtime / 60;
         int minutes = runtime % 60;
@@ -144,18 +140,20 @@ public class DetailsScreen extends Fragment {
                 .load("https://image.tmdb.org/t/p/w500" + data.getMovieDetails().getPosterPath())
                 .placeholder(R.drawable.loading)
                 .into(binding.moviePoster);
-
-        similarMoviesAdapter.submitList(data.getSimilarMovies());
-
-//        binding.movieTitle.setText(data.getMovieDetails().getTitle());
-//        binding.movieGenre.setText(data.getMovieDetails().getGenres());
-//        binding.releaseDate.setText(data.getMovieDetails().getReleaseDate());
-//        binding.movieRuntime.setText(data.getMovieDetails().getRuntime());
-//        binding.movieDescription.setText(data.getMovieDetails().getOverview());
-//        binding.movieCast.setText(data.getMovieDetails().getCast());
-//
         renderReviews(data.getReviews());
+
+        List<MovieUi> similarMovies = data.getSimilarMovies();
+        if (similarMovies != null){
+            similarMoviesAdapter.submitList(
+                    similarMovies.subList(0,Math.min(similarMovies.size(),6))
+            );
+        }
 //        similarMoviesAdapter.submitList(data.getSimilarMovies());
+        binding.favoriteIcon.setOnClickListener(view -> {
+            int movieId = data.getMovieDetails().getId();
+            detailsViewModel.toggleFavorite(movieId);
+        });
+
     }
     private void renderReviews(java.util.List<com.example.movieapp.domain.models.ReviewsUi> reviews) {
         binding.reviewsContainer.removeAllViews();

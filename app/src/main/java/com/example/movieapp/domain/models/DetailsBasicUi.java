@@ -15,6 +15,7 @@ public class DetailsBasicUi {
     private String homepage;
     private int runtime;
 
+
     public DetailsBasicUi(String backdropPath, List<GenreUi> genres, int id, String overview, String posterPath, String releaseDate, String title, double voteAverage, String homepage, int runtime) {
         this.backdropPath = backdropPath;
         this.genres = genres;
