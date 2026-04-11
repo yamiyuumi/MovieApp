@@ -2,6 +2,7 @@ package com.example.movieapp.ui.detailsScreen;
 
 import static com.example.movieapp.ui.homeScreen.MovieViewModel.formatDate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -153,6 +154,21 @@ public class DetailsScreen extends Fragment {
             int movieId = data.getMovieDetails().getId();
             detailsViewModel.toggleFavorite(movieId);
         });
+
+        String homepage = data.getMovieDetails().getHomepage();
+        if (homepage == null || homepage.isEmpty()){
+            binding.shareIcon.setVisibility(View.GONE);
+        }else{
+            binding.shareIcon.setVisibility(View.VISIBLE);
+
+            binding.shareIcon.setOnClickListener(view -> {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, homepage);
+
+                startActivity(Intent.createChooser(shareIntent, " Share movie"));
+            });
+        }
 
     }
     private void renderReviews(java.util.List<com.example.movieapp.domain.models.ReviewsUi> reviews) {
