@@ -1,11 +1,13 @@
 package com.example.movieapp.ui.homeScreen;
 
-import android.text.format.DateUtils;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.movieapp.common.NetworkUtils;
 import com.example.movieapp.domain.models.MovieUi;
 import com.example.movieapp.domain.usecase.GetMoviesUseCase;
 
@@ -25,15 +27,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MovieViewModel extends ViewModel {
 
     private final GetMoviesUseCase getMoviesUseCase;
-
-    /**
-     * CompositeDisposable lives here — cleared in onCleared().
-     * This is the correct owner: the ViewModel knows its own lifecycle.
-     */
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    /** LiveData backed by Room — auto-updates when DB changes. */
-    public final LiveData<List<MovieUi>> movies;
+    private final MediatorLiveData<List<MovieUi>> _movies = new MediatorLiveData<>();
+    public final LiveData<List<MovieUi>> movies = _movies;
+
+    private LiveData<List<MovieUi>> currentSource;
+    private final LiveData<List<MovieUi>> allMoviesSource;
+    private final LiveData<List<MovieUi>> favoritesOnlySource;
 
     private final MutableLiveData<Boolean> _isLoading = new MutableLiveData<>(false);
     public final LiveData<Boolean> isLoading = _isLoading;
@@ -44,16 +45,41 @@ public class MovieViewModel extends ViewModel {
     @Inject
     public MovieViewModel(GetMoviesUseCase getMoviesUseCase) {
         this.getMoviesUseCase = getMoviesUseCase;
-        this.movies = getMoviesUseCase.execute();
-        refresh(); // trigger initial network load
+        this.allMoviesSource = getMoviesUseCase.execute();
+        this.favoritesOnlySource = getMoviesUseCase.executeFavoritesOnly();
     }
 
-    /**
-     * Triggers a network refresh. The Completable from the use case
-     * is subscribed here; disposable is stored and cleared in onCleared().
-     */
-    public void refresh() {
+    public void loadMovies(Context context) {
+        if (NetworkUtils.isOnline(context)) {
+            switchSource(allMoviesSource);
+            refresh(context);
+        } else {
+            switchSource(favoritesOnlySource);
+            _isLoading.setValue(false);
+            _error.setValue("Offline mode: showing favorite movies only");
+        }
+    }
+
+    private void switchSource(LiveData<List<MovieUi>> newSource) {
+        if (currentSource != null) {
+            _movies.removeSource(currentSource);
+        }
+
+        currentSource = newSource;
+        _movies.addSource(currentSource, _movies::setValue);
+    }
+
+    public void refresh(Context context) {
+        if (!NetworkUtils.isOnline(context)) {
+            switchSource(favoritesOnlySource);
+            _isLoading.setValue(false);
+            _error.setValue("Offline mode: showing favorite movies only");
+            return;
+        }
+
+        switchSource(allMoviesSource);
         _isLoading.setValue(true);
+
         disposables.add(
                 getMoviesUseCase.refresh()
                         .subscribeOn(Schedulers.io())
@@ -68,24 +94,20 @@ public class MovieViewModel extends ViewModel {
         );
     }
 
-    /**
-     * Atomic toggle by movie ID — delegates to SQL-level toggle.
-     * Disposable is added to the same CompositeDisposable.
-     */
     public void toggleFavorite(MovieUi movie) {
         disposables.add(
                 getMoviesUseCase.toggleFavorite(movie.getId())
                         .subscribeOn(Schedulers.io())
                         .subscribe(
-                                () -> { /* success — LiveData re-emits automatically */ },
-                                err -> _error.setValue("Toggle failed: " + err.getMessage())
+                                () -> { },
+                                err -> _error.postValue("Toggle failed: " + err.getMessage())
                         )
         );
     }
 
     @Override
     protected void onCleared() {
-        disposables.clear(); // safe lifecycle cleanup
+        disposables.clear();
         super.onCleared();
     }
 

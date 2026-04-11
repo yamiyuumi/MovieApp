@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
 
 public class GetMoviesUseCase {
 
@@ -32,6 +33,21 @@ public class GetMoviesUseCase {
                 MovieEntityMapper::mapToUiMovieList
         );
     }
+    public LiveData<List<MovieUi>> executeFavoritesOnly() {
+        return Transformations.map(
+                repository.getFavorites(),
+                MovieEntityMapper::mapToUiMovieList
+        );
+    }
+
+//    public Single<List<MovieUi>> getFavoriteMoviesOffline(){
+//        return repository.getFavoritesSingle()
+//                .map(movieEntities ->
+//                    movieEntities.stream()
+//                            .map(MovieEntityMapper::mapToMovieUi)
+//                            .collect(java.util.stream.Collectors.toList())
+//                );
+//    }
 
     /**
      * Triggers network refresh. Returns Completable so the ViewModel

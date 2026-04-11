@@ -23,5 +23,10 @@
         android:id="@+id/detailsScreen"
         android:name="com.example.movieapp.ui.detailsScreen.DetailsScreen"
         tools:layout="@layout/details_layout"
-        android:label="DetailsScreen" />
+        android:label="DetailsScreen">
+        <action
+            android:id="@+id/action_detalsScreen_self"
+            app:destination="@+id/detailsScreen"
+            />
+    </fragment>
 </navigation>

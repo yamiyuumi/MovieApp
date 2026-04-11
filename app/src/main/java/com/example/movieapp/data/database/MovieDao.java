@@ -35,6 +35,11 @@ public interface MovieDao {
     @Query("SELECT * FROM movie_db WHERE is_favorite = 1")
     LiveData<List<MovieEntity>> getFavorites();
 
+
+    //offline
+//    @Query("SELECT * FROM movie_db WHERE is_favorite = 1")
+//    Single<List<MovieEntity>> getFavoritesSingle();
+
     @Delete
     void delete(MovieEntity movie);
 
@@ -44,4 +49,6 @@ public interface MovieDao {
      */
     @Query("UPDATE movie_db SET is_favorite = CASE WHEN is_favorite = 1 THEN 0 ELSE 1 END WHERE id = :id")
     Completable toggleFavorite(int id);
+
+
 }

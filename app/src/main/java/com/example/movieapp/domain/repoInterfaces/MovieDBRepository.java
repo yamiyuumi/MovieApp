@@ -7,11 +7,14 @@ import com.example.movieapp.data.database.MovieEntity;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
 
 public interface MovieDBRepository {
 
     /** Single source of truth — Room LiveData, auto-updates on DB change. */
     LiveData<List<MovieEntity>> getMovies();
+
+    LiveData<List<MovieEntity>> getFavorites();
 
     /**
      * Fetch from network and write to Room.

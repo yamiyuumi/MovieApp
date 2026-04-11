@@ -61,8 +61,10 @@ public class SimilarMoviesAdapter extends ListAdapter<MovieUi, SimilarMoviesAdap
             binding.similarMovieDate.setText(formatDate(movie.getReleaseDate()));
 
             binding.getRoot().setOnClickListener(v -> {
-                itemClickListener.onItemClick(movie.getId(), movie.isFavorite());
+                itemClickListener.onItemClick(movie.getId());
             });
+//            binding.getRoot().setOnClickListener(null);
+//            binding.getRoot().setClickable(false);
         }
     }
 
@@ -83,6 +85,6 @@ public class SimilarMoviesAdapter extends ListAdapter<MovieUi, SimilarMoviesAdap
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int movieId, boolean isFavorite);
+        void onItemClick(int movieId);
     }
 }

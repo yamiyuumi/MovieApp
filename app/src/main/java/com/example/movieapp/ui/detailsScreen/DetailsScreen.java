@@ -56,13 +56,16 @@ public class DetailsScreen extends Fragment {
         detailsViewModel = new ViewModelProvider(this).get(DetailsViewModel.class);
 
 
-        similarMoviesAdapter = new SimilarMoviesAdapter((movieId, isFavorite) -> {
+        similarMoviesAdapter = new SimilarMoviesAdapter((movieId) -> {
             Bundle bundle = new Bundle();
             bundle.putInt("MOVIE_ID", movieId);
 
+//            Navigation.findNavController(binding.getRoot())
+//                    .navigate(R.id.action_movieListFragment_to_detailsScreen, bundle);
+//        });
             Navigation.findNavController(binding.getRoot())
-                    .navigate(R.id.action_movieListFragment_to_detailsScreen, bundle);
-        });
+                    .navigate(R.id.action_detalsScreen_self, bundle);
+            });
 
         binding.similarMoviesRecyclerView.setLayoutManager(
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
