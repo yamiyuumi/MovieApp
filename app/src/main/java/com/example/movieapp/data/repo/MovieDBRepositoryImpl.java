@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -42,6 +43,12 @@ public class MovieDBRepositoryImpl implements MovieDBRepository {
     public LiveData<List<MovieEntity>> getFavorites(){
         return movieDao.getFavorites();
 //                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Maybe<MovieEntity> getMovieById(int movieId){
+        return movieDao.getMovieById(movieId)
+                .subscribeOn(Schedulers.io());
     }
 
     /**

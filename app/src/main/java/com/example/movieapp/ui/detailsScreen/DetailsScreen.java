@@ -173,6 +173,28 @@ public class DetailsScreen extends Fragment {
             });
         }
 
+
+        if(data.getMovieDetails().isFavorite()){
+            binding.favoriteIcon.setImageResource(R.drawable.ic_favorite_selected);
+        }else{
+            binding.favoriteIcon.setImageResource(R.drawable.ic_favorite_unselect);
+        }
+
+        binding.favoriteIcon.setOnClickListener(v ->{
+            int movieId = data.getMovieDetails().getId();
+            detailsViewModel.toggleFavorite(movieId);
+
+            boolean newState = !data.getMovieDetails().isFavorite();
+            data.getMovieDetails().setFavorite(newState);
+
+            binding.favoriteIcon.setImageResource(
+                    newState
+                            ? R.drawable.ic_favorite_selected
+                            : R.drawable.ic_favorite_unselect
+
+            );
+        });
+
     }
     private void renderReviews(java.util.List<com.example.movieapp.domain.models.ReviewsUi> reviews) {
         binding.reviewsContainer.removeAllViews();

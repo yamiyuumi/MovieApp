@@ -7,6 +7,7 @@ import com.example.movieapp.data.database.MovieEntity;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 
 public interface MovieDBRepository {
@@ -15,6 +16,8 @@ public interface MovieDBRepository {
     LiveData<List<MovieEntity>> getMovies();
 
     LiveData<List<MovieEntity>> getFavorites();
+
+    Maybe<MovieEntity> getMovieById(int movieId);
 
     /**
      * Fetch from network and write to Room.

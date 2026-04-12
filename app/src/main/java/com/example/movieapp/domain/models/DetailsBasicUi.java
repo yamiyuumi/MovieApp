@@ -15,6 +15,7 @@ public class DetailsBasicUi {
     private String homepage;
     private int runtime;
 
+    private boolean isFavorite;
 
     public DetailsBasicUi(String backdropPath, List<GenreUi> genres, int id, String overview, String posterPath, String releaseDate, String title, double voteAverage, String homepage, int runtime) {
         this.backdropPath = backdropPath;
@@ -27,6 +28,14 @@ public class DetailsBasicUi {
         this.voteAverage = voteAverage;
         this.homepage = homepage;
         this.runtime = runtime;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 
     // Getters

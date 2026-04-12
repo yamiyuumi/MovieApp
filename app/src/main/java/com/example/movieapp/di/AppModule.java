@@ -40,8 +40,9 @@ public abstract class AppModule {
     }
 
     @Provides
-    public static MovieDetailsRepository provideMovieDetailsRepository(MovieApiService apiService) {
-        return new MovieDetailsRepositoryImpl(apiService);
+    public static MovieDetailsRepository provideMovieDetailsRepository(MovieApiService apiService,
+                                                                       MovieDBRepository movieDBRepository) {
+        return new MovieDetailsRepositoryImpl(apiService,movieDBRepository);
     }
 
     @Provides
