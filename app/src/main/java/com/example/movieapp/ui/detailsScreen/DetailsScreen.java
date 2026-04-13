@@ -22,11 +22,9 @@ import com.bumptech.glide.Glide;
 import com.example.movieapp.R;
 //import com.google.android.material.R;
 import com.example.movieapp.databinding.DetailsLayoutBinding;
-import com.example.movieapp.domain.models.CastUi;
 import com.example.movieapp.domain.models.GenreUi;
 import com.example.movieapp.domain.models.MovieDetailsWithReviewsUi;
 import com.example.movieapp.domain.models.MovieUi;
-import com.example.movieapp.domain.models.ReviewsUi;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -55,36 +53,11 @@ public class DetailsScreen extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         detailsViewModel = new ViewModelProvider(this).get(DetailsViewModel.class);
 
-
-        similarMoviesAdapter = new SimilarMoviesAdapter((movieId) -> {
-            Bundle bundle = new Bundle();
-            bundle.putInt("MOVIE_ID", movieId);
-
-//            Navigation.findNavController(binding.getRoot())
-//                    .navigate(R.id.action_movieListFragment_to_detailsScreen, bundle);
-//        });
-            Navigation.findNavController(binding.getRoot())
-                    .navigate(R.id.action_detalsScreen_self, bundle);
-            });
-
-        binding.similarMoviesRecyclerView.setLayoutManager(
-                new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        );
-
-        binding.similarMoviesRecyclerView.setAdapter(similarMoviesAdapter);
-
-
-        if (getArguments() != null) {
-            int movieId = getArguments().getInt("MOVIE_ID", -1);
-            if (movieId != -1) {
-                detailsViewModel.fetchMovieDetailsWithReviews(movieId);
-            }
-        }
-
+        setUpSimilarRecycler();
         observeViewModel();
-        binding.backButton.setOnClickListener(view1 -> {
-            Navigation.findNavController(binding.getRoot()).navigateUp();
-        });
+        setUpBackButton();
+        loadMovieFromArguments();
+
     }
 
     private void observeViewModel() {
@@ -104,12 +77,100 @@ public class DetailsScreen extends Fragment {
 
 
     }
+    private void setUpBackButton(){
+        binding.backButton.setOnClickListener(view1 -> {
+            Navigation.findNavController(binding.getRoot()).navigateUp();
+        });
+    }
+    private void setUpSimilarRecycler(){
+        similarMoviesAdapter = new SimilarMoviesAdapter((movieId) -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt("MOVIE_ID", movieId);
 
+//            Navigation.findNavController(binding.getRoot())
+//                    .navigate(R.id.action_movieListFragment_to_detailsScreen, bundle);
+//        });
+            Navigation.findNavController(binding.getRoot())
+                    .navigate(R.id.action_detalsScreen_self, bundle);
+        });
+
+        binding.similarMoviesRecyclerView.setLayoutManager(
+                new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        );
+
+        binding.similarMoviesRecyclerView.setAdapter(similarMoviesAdapter);
+    }
+    private void loadMovieFromArguments(){
+        if (getArguments() != null) {
+            int movieId = getArguments().getInt("MOVIE_ID", -1);
+            if (movieId != -1) {
+                detailsViewModel.fetchMovieDetailsWithReviews(movieId);
+            }
+        }
+    }
     private void updateUI(MovieDetailsWithReviewsUi data) {
-        if (data == null) return;
+        if (data == null || data.getMovieDetails() == null) return;
         // TODO: bind data.getMovieDetails() and data.getReviews() to XML views
+        bindBasicInfo(data);
+        bindPoster(data);
+        renderReviews(data.getReviews());
+        bindSimilarMovies(data);
+        bindShare(data);
+        bindFavorite(data);
+    }
+    public void bindFavorite(MovieDetailsWithReviewsUi data){
+        updateFavoriteIcon(data.getMovieDetails().isFavorite());
 
-        if (data == null) return;
+        binding.favoriteIcon.setOnClickListener(v ->{
+            int movieId = data.getMovieDetails().getId();
+            detailsViewModel.toggleFavorite(movieId);
+
+            boolean newState = !data.getMovieDetails().isFavorite();
+            data.getMovieDetails().setFavorite(newState);
+
+            updateFavoriteIcon(newState);
+        });
+    }
+    public void updateFavoriteIcon(boolean isFavorite){
+        binding.favoriteIcon.setImageResource(
+                isFavorite
+                        ? R.drawable.ic_favorite_selected
+                        : R.drawable.ic_favorite_unselect
+
+        );
+    }
+
+    public void bindShare(MovieDetailsWithReviewsUi data){
+        String homepage = data.getMovieDetails().getHomepage();
+        if (homepage == null || homepage.isEmpty()){
+            binding.shareIcon.setVisibility(View.GONE);
+        }else{
+            binding.shareIcon.setVisibility(View.VISIBLE);
+
+            binding.shareIcon.setOnClickListener(view -> {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, homepage);
+
+                startActivity(Intent.createChooser(shareIntent, " Share movie"));
+            });
+        }
+    }
+    private void bindSimilarMovies(MovieDetailsWithReviewsUi data){
+        List<MovieUi> similarMovies = data.getSimilarMovies();
+
+        if (similarMovies == null || similarMovies.isEmpty()){
+            binding.similarMovies.setVisibility(View.GONE);
+            binding.similarMoviesRecyclerView.setVisibility(View.GONE);
+            return;
+        }
+        binding.similarMovies.setVisibility(View.VISIBLE);
+        binding.similarMoviesRecyclerView.setVisibility(View.VISIBLE);
+        similarMoviesAdapter.submitList(
+                similarMovies.subList(0,Math.min(similarMovies.size(),6))
+        );
+    }
+    private void bindBasicInfo(MovieDetailsWithReviewsUi data){
         binding.movieTitle.setText(data.getMovieDetails().getTitle());
 
         binding.movieDescription.setText(data.getMovieDetails().getOverview());
@@ -140,61 +201,13 @@ public class DetailsScreen extends Fragment {
         int minutes = runtime % 60;
         binding.movieRuntime.setText(hours + "h " + minutes + "m");
 
+
+    }
+    private void bindPoster(MovieDetailsWithReviewsUi data){
         Glide.with(requireContext())
                 .load("https://image.tmdb.org/t/p/w500" + data.getMovieDetails().getPosterPath())
                 .placeholder(R.drawable.loading)
                 .into(binding.moviePoster);
-        renderReviews(data.getReviews());
-
-        List<MovieUi> similarMovies = data.getSimilarMovies();
-        if (similarMovies != null){
-            similarMoviesAdapter.submitList(
-                    similarMovies.subList(0,Math.min(similarMovies.size(),6))
-            );
-        }
-//        similarMoviesAdapter.submitList(data.getSimilarMovies());
-        binding.favoriteIcon.setOnClickListener(view -> {
-            int movieId = data.getMovieDetails().getId();
-            detailsViewModel.toggleFavorite(movieId);
-        });
-
-        String homepage = data.getMovieDetails().getHomepage();
-        if (homepage == null || homepage.isEmpty()){
-            binding.shareIcon.setVisibility(View.GONE);
-        }else{
-            binding.shareIcon.setVisibility(View.VISIBLE);
-
-            binding.shareIcon.setOnClickListener(view -> {
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, homepage);
-
-                startActivity(Intent.createChooser(shareIntent, " Share movie"));
-            });
-        }
-
-
-        if(data.getMovieDetails().isFavorite()){
-            binding.favoriteIcon.setImageResource(R.drawable.ic_favorite_selected);
-        }else{
-            binding.favoriteIcon.setImageResource(R.drawable.ic_favorite_unselect);
-        }
-
-        binding.favoriteIcon.setOnClickListener(v ->{
-            int movieId = data.getMovieDetails().getId();
-            detailsViewModel.toggleFavorite(movieId);
-
-            boolean newState = !data.getMovieDetails().isFavorite();
-            data.getMovieDetails().setFavorite(newState);
-
-            binding.favoriteIcon.setImageResource(
-                    newState
-                            ? R.drawable.ic_favorite_selected
-                            : R.drawable.ic_favorite_unselect
-
-            );
-        });
-
     }
     private void renderReviews(java.util.List<com.example.movieapp.domain.models.ReviewsUi> reviews) {
         binding.reviewsContainer.removeAllViews();
