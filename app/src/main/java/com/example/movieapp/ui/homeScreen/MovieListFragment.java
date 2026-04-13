@@ -40,6 +40,13 @@ public class MovieListFragment extends Fragment {
         adapter = new MovieListAdapter(
                 movie -> viewModel.toggleFavorite(movie),
                 (movieId, isfavorite) -> {
+//                    if (!com.example.movieapp.common.NetworkUtils.isOnline(requireContext())){
+//                        Snackbar.make(binding.getRoot(),
+//                        "Details are unavailable offline",
+//                                Snackbar.LENGTH_SHORT)
+//                                .show();
+//
+//                    }
                     Bundle bundle = new Bundle();
                     bundle.putInt("MOVIE_ID", movieId);
                     Navigation.findNavController(binding.getRoot())
@@ -47,19 +54,28 @@ public class MovieListFragment extends Fragment {
                 }
         );
 
+        boolean isOnline = com.example.movieapp.common.NetworkUtils.isOnline(requireContext());
+
+        adapter.setDetailsEnabled(isOnline);
+
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setItemAnimator(null);
 
         viewModel = new ViewModelProvider(this).get(MovieViewModel.class);
         viewModel.loadMovies(requireContext());
+        binding.swipeRefreshLayout.setOnRefreshListener(() ->{
+            viewModel.refresh(requireContext());
+        });
 
         viewModel.movies.observe(getViewLifecycleOwner(), movies -> {
             adapter.submitList(movies);
         });
 
-        viewModel.isLoading.observe(getViewLifecycleOwner(), isLoading ->
-                binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE)
-        );
+        viewModel.isLoading.observe(getViewLifecycleOwner(), isLoading -> {
+            binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+            binding.swipeRefreshLayout.setRefreshing(isLoading);
+        });
+
 
         viewModel.error.observe(getViewLifecycleOwner(), errorMsg -> {
             if (errorMsg != null && !errorMsg.isEmpty()) {

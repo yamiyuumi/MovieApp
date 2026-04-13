@@ -22,6 +22,12 @@ public class MovieListAdapter extends ListAdapter<MovieUi, MovieListAdapter.Movi
 
     private OnFavoriteClickListener favoriteClickListener;
     private OnItemClickListener itemClickListener;
+    private boolean detailsEnabled = true ;
+
+    public void setDetailsEnabled(boolean detailsEnabled) {
+        this.detailsEnabled = detailsEnabled;
+        notifyDataSetChanged();
+    }
 
     protected MovieListAdapter(OnFavoriteClickListener favoriteClickListener, OnItemClickListener itemClickListener) {
         super(new DiffCallback());
@@ -73,9 +79,21 @@ public class MovieListAdapter extends ListAdapter<MovieUi, MovieListAdapter.Movi
                 favoriteClickListener.onFavoriteClick(movie);
             });
 
-            binding.getRoot().setOnClickListener( view -> {
-                itemClickListener.onItemClick(movie.getId(), movie.isFavorite());
-            });
+//            binding.getRoot().setOnClickListener( view -> {
+//                itemClickListener.onItemClick(movie.getId(), movie.isFavorite());
+//            });
+
+            if (detailsEnabled){
+                binding.getRoot().setAlpha(1f);
+                binding.getRoot().setClickable(true);
+                binding.getRoot().setOnClickListener( view -> {
+                    itemClickListener.onItemClick(movie.getId(), movie.isFavorite());
+                });
+            }else{
+                binding.getRoot().setAlpha(0.6f);
+                binding.getRoot().setClickable(false);
+                binding.getRoot().setOnClickListener(null);
+            }
         }
     }
 
