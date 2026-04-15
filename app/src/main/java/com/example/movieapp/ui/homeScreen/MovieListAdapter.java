@@ -24,10 +24,10 @@ public class MovieListAdapter extends ListAdapter<MovieUi, MovieListAdapter.Movi
     private OnItemClickListener itemClickListener;
     private boolean detailsEnabled = true ;
 
-    public void setDetailsEnabled(boolean detailsEnabled) {
-        this.detailsEnabled = detailsEnabled;
-        notifyDataSetChanged();
-    }
+//    public void setDetailsEnabled(boolean detailsEnabled) {
+//        this.detailsEnabled = detailsEnabled;
+//        notifyDataSetChanged();
+//    }
 
     protected MovieListAdapter(OnFavoriteClickListener favoriteClickListener, OnItemClickListener itemClickListener) {
         super(new DiffCallback());

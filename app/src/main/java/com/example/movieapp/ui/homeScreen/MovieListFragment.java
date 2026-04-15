@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.movieapp.R;
+import com.example.movieapp.common.NetworkUtils;
 import com.example.movieapp.databinding.FragmentMovieBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -30,7 +31,15 @@ public class MovieListFragment extends Fragment {
         binding = FragmentMovieBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+    @Override
+    public void onResume(){
+        super.onResume();
 
+//        boolean isOnline = com.example.movieapp.common.NetworkUtils.isOnline(requireContext());
+//        adapter.setDetailsEnabled(isOnline);
+
+        viewModel.loadMovies(requireContext());
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -40,13 +49,13 @@ public class MovieListFragment extends Fragment {
         adapter = new MovieListAdapter(
                 movie -> viewModel.toggleFavorite(movie),
                 (movieId, isfavorite) -> {
-//                    if (!com.example.movieapp.common.NetworkUtils.isOnline(requireContext())){
-//                        Snackbar.make(binding.getRoot(),
-//                        "Details are unavailable offline",
-//                                Snackbar.LENGTH_SHORT)
-//                                .show();
-//
-//                    }
+                    if (!NetworkUtils.isOnline(requireContext())){
+                        Snackbar.make(binding.getRoot(),
+                        "Details are unavailable offline",
+                                Snackbar.LENGTH_SHORT)
+                                .show();
+
+                    }
                     Bundle bundle = new Bundle();
                     bundle.putInt("MOVIE_ID", movieId);
                     Navigation.findNavController(binding.getRoot())
@@ -54,9 +63,9 @@ public class MovieListFragment extends Fragment {
                 }
         );
 
-        boolean isOnline = com.example.movieapp.common.NetworkUtils.isOnline(requireContext());
+//        boolean isOnline = com.example.movieapp.common.NetworkUtils.isOnline(requireContext());
 
-        adapter.setDetailsEnabled(isOnline);
+//        adapter.setDetailsEnabled(isOnline);
 
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setItemAnimator(null);
@@ -69,6 +78,15 @@ public class MovieListFragment extends Fragment {
 
         viewModel.movies.observe(getViewLifecycleOwner(), movies -> {
             adapter.submitList(movies);
+            boolean isOffline = !NetworkUtils.isOnline(requireContext());
+
+            if(isOffline &&(movies == null || movies.isEmpty())){
+                binding.emptyView.setVisibility(View.VISIBLE);
+                binding.recyclerView.setVisibility(View.GONE);
+            } else {
+                binding.emptyView.setVisibility(View.GONE);
+                binding.recyclerView.setVisibility(View.VISIBLE);
+            }
         });
 
         viewModel.isLoading.observe(getViewLifecycleOwner(), isLoading -> {
@@ -82,6 +100,7 @@ public class MovieListFragment extends Fragment {
                 Snackbar.make(binding.getRoot(), errorMsg, Snackbar.LENGTH_LONG)
                         .setAction("Retry", v -> viewModel.refresh(requireContext()))
                         .show();
+                viewModel.clearError();
             }
         });
     }

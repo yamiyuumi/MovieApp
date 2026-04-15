@@ -101,6 +101,15 @@ public class DetailsScreen extends Fragment {
         binding.similarMoviesRecyclerView.setAdapter(similarMoviesAdapter);
     }
     private void loadMovieFromArguments(){
+        if (!com.example.movieapp.common.NetworkUtils.isOnline(requireContext())){
+            Snackbar.make(binding.getRoot(),
+                            "Details are unavailable offline",
+                            Snackbar.LENGTH_SHORT)
+                    .show();
+            Navigation.findNavController(binding.getRoot()).navigateUp();
+            return;
+
+        }
         if (getArguments() != null) {
             int movieId = getArguments().getInt("MOVIE_ID", -1);
             if (movieId != -1) {

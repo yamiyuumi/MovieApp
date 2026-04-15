@@ -93,6 +93,9 @@ public class MovieViewModel extends ViewModel {
                         )
         );
     }
+    public void clearError(){
+        _error.setValue(null);
+    }
 
     public void toggleFavorite(MovieUi movie) {
         disposables.add(
