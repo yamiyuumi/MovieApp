@@ -4,6 +4,7 @@ import static com.example.movieapp.ui.homeScreen.MovieViewModel.formatDate;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -65,6 +66,8 @@ public class MovieListAdapter extends ListAdapter<MovieUi, MovieListAdapter.Movi
 
             binding.movieTitle.setText(movie.getTitle());
             binding.movieRating.setRating((float) (movie.getVoteAverage() / 2));
+//            bindCustomRating(data.getMovieDetails().getVoteAverage());
+
 //            binding.releaseDate.setText(movie.getReleaseDate());
             binding.releaseDate.setText(formatDate(movie.getReleaseDate()));
 
@@ -96,6 +99,24 @@ public class MovieListAdapter extends ListAdapter<MovieUi, MovieListAdapter.Movi
             }
         }
     }
+//    private void bindCustomRating(double voteAverage){
+//        int rating = (int) Math.round(voteAverage/2.0);
+//        ImageView[] stars = {
+//                binding.star1,
+//                binding.star2,
+//                binding.star3,
+//                binding.star4,
+//                binding.star5
+//        };
+//        for (int i=0; i<5; i++){
+//            if(i < rating){
+//                stars[i].setImageResource(R.drawable.star_full);
+//            }else{
+//                stars[i].setImageResource(R.drawable.star_empty);
+//
+//            }
+//        }
+//    }
 
     static class DiffCallback extends DiffUtil.ItemCallback<MovieUi> {
         @Override

@@ -4,11 +4,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="320dp"
-    android:layout_height="180dp"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
     android:layout_margin="16dp"
     app:cardCornerRadius="30dp"
-    app:cardElevation="64dp"
+    app:cardElevation="8dp"
     app:strokeColor="#F2B233"
     app:strokeWidth="4dp"
     android:background="@color/white">
@@ -45,7 +45,7 @@
             android:id="@+id/movieTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="40dp"
             android:text="Movie Title"
@@ -69,6 +69,22 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/movieTitle"
             app:layout_constraintTop_toBottomOf="@id/movieTitle" />
+<!--        <LinearLayout-->
+<!--            android:id="@+id/movieRating"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            app:layout_constraintStart_toStartOf="@id/movieTitle"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/movieTitle" >-->
+
+<!--            <ImageView android:id="@+id/star1" android:layout_width="15dp" android:layout_height="15dp" android:src="@drawable/star_full"/>-->
+<!--            <ImageView android:id="@+id/star2" android:layout_width="15dp" android:layout_height="15dp" android:src="@drawable/star_full"/>-->
+<!--            <ImageView android:id="@+id/star3" android:layout_width="15dp" android:layout_height="15dp" android:src="@drawable/star_full"/>-->
+<!--            <ImageView android:id="@+id/star4" android:layout_width="15dp" android:layout_height="15dp" android:src="@drawable/star_empty"/>-->
+<!--            <ImageView android:id="@+id/star5" android:layout_width="15dp" android:layout_height="15dp" android:src="@drawable/star_empty"/>-->
+<!--        </LinearLayout>-->
 
         <TextView
             android:id="@+id/releaseDate"

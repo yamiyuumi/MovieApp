@@ -8,11 +8,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -203,7 +205,9 @@ public class DetailsScreen extends Fragment {
 
         binding.releaseDate.setText(formatDate(data.getMovieDetails().getReleaseDate()));
 
-        binding.movieRating.setRating((float) (data.getMovieDetails().getVoteAverage() / 2));
+//        binding.movieRating.setRating((float) (data.getMovieDetails().getVoteAverage() / 2));
+
+        bindCustomRating(data.getMovieDetails().getVoteAverage());
 
         int runtime = data.getMovieDetails().getRuntime();
         int hours = runtime / 60;
@@ -225,7 +229,7 @@ public class DetailsScreen extends Fragment {
             TextView emptyView = new TextView(requireContext());
             emptyView.setText("No reviews available");
             emptyView.setTextSize(14f);
-            emptyView.setTextColor(android.graphics.Color.parseColor("#FFD54F"));
+            emptyView.setTextColor(ContextCompat.getColor(requireContext(),R.color.orangish));
             binding.reviewsContainer.addView(emptyView);
             return;
         }
@@ -249,7 +253,7 @@ public class DetailsScreen extends Fragment {
             authorView.setText(review.getAuthor());
             authorView.setTextSize(15f);
             authorView.setTypeface(null, android.graphics.Typeface.BOLD);
-            authorView.setTextColor(android.graphics.Color.parseColor("#FFD54F"));
+            authorView.setTextColor(ContextCompat.getColor(requireContext(),R.color.orangish));
 
             TextView contentView = new TextView(requireContext());
             String content = review.getContent();
@@ -273,6 +277,25 @@ public class DetailsScreen extends Fragment {
             reviewBlock.addView(contentView);
 
             binding.reviewsContainer.addView(reviewBlock);
+        }
+    }
+
+    private void bindCustomRating(double voteAverage){
+        int rating = (int) Math.round(voteAverage/2.0);
+        ImageView[] stars = {
+                binding.star1,
+                binding.star2,
+                binding.star3,
+                binding.star4,
+                binding.star5
+        };
+        for (int i=0; i<5; i++){
+            if(i < rating){
+                stars[i].setImageResource(R.drawable.star_full);
+            }else{
+                stars[i].setImageResource(R.drawable.star_empty);
+
+            }
         }
     }
     private int dpToPx(int dp) {
