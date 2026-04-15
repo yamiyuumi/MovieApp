@@ -228,7 +228,7 @@ public class DetailsScreen extends Fragment {
         if (reviews == null || reviews.isEmpty()) {
             TextView emptyView = new TextView(requireContext());
             emptyView.setText("No reviews available");
-            emptyView.setTextSize(14f);
+            emptyView.setTextSize(13f);
             emptyView.setTextColor(ContextCompat.getColor(requireContext(),R.color.orangish));
             binding.reviewsContainer.addView(emptyView);
             return;
@@ -251,7 +251,7 @@ public class DetailsScreen extends Fragment {
 
             TextView authorView = new TextView(requireContext());
             authorView.setText(review.getAuthor());
-            authorView.setTextSize(15f);
+            authorView.setTextSize(12f);
             authorView.setTypeface(null, android.graphics.Typeface.BOLD);
             authorView.setTextColor(ContextCompat.getColor(requireContext(),R.color.orangish));
 

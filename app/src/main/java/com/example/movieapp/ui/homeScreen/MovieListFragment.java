@@ -54,7 +54,7 @@ public class MovieListFragment extends Fragment {
                         "Details are unavailable offline",
                                 Snackbar.LENGTH_SHORT)
                                 .show();
-
+                    return;
                     }
                     Bundle bundle = new Bundle();
                     bundle.putInt("MOVIE_ID", movieId);
