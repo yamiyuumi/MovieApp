@@ -36,9 +36,6 @@ public class MovieListFragment extends Fragment {
     public void onResume(){
         super.onResume();
 
-//        boolean isOnline = com.example.movieapp.common.NetworkUtils.isOnline(requireContext());
-//        adapter.setDetailsEnabled(isOnline);
-
         viewModel.loadMovies(requireContext());
     }
     @Override
@@ -63,10 +60,6 @@ public class MovieListFragment extends Fragment {
                             .navigate(R.id.action_movieListFragment_to_detailsScreen, bundle);
                 }
         );
-
-//        boolean isOnline = com.example.movieapp.common.NetworkUtils.isOnline(requireContext());
-
-//        adapter.setDetailsEnabled(isOnline);
 
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setItemAnimator(null);
@@ -96,7 +89,6 @@ public class MovieListFragment extends Fragment {
         });
 
         viewModel.isLoading.observe(getViewLifecycleOwner(), isLoading -> {
-//            binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
             binding.swipeRefreshLayout.setRefreshing(isLoading);
 
             if(isLoading) {

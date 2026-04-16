@@ -25,11 +25,6 @@ public class MovieListAdapter extends ListAdapter<MovieUi, MovieListAdapter.Movi
     private OnItemClickListener itemClickListener;
     private boolean detailsEnabled = true ;
 
-//    public void setDetailsEnabled(boolean detailsEnabled) {
-//        this.detailsEnabled = detailsEnabled;
-//        notifyDataSetChanged();
-//    }
-
     protected MovieListAdapter(OnFavoriteClickListener favoriteClickListener, OnItemClickListener itemClickListener) {
         super(new DiffCallback());
         this.favoriteClickListener = favoriteClickListener;
@@ -81,10 +76,6 @@ public class MovieListAdapter extends ListAdapter<MovieUi, MovieListAdapter.Movi
             binding.favoriteIcon.setOnClickListener(v -> {
                 favoriteClickListener.onFavoriteClick(movie);
             });
-
-//            binding.getRoot().setOnClickListener( view -> {
-//                itemClickListener.onItemClick(movie.getId(), movie.isFavorite());
-//            });
 
             if (detailsEnabled){
                 binding.getRoot().setAlpha(1f);

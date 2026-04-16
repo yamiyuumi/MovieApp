@@ -36,10 +36,5 @@ public class MovieDetailsWithReviewsUi {
     public List<ReviewsUi> getReviews() {
         return reviews;
     }
-//    public ReviewsUi getReviews() {
-//        if (reviews != null && !reviews.isEmpty()) {
-//            return reviews.get(0);
-//        }
-//        return null;
-//    }
+
 }

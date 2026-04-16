@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--    Card view gia kykliko gyrwgyrw-->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -54,33 +53,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-<!--        <RatingBar-->
-<!--            android:id="@+id/movieRating"-->
-<!--            style="@style/Widget.AppCompat.RatingBar.Small"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            android:numStars="5"-->
-
-<!--            android:stepSize="1"-->
-<!--            android:progressTint="#FFD54F"-->
-<!--            android:progressBackgroundTint="#444444"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="@id/movieTitle"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/movieTitle" />-->
-<!--        <LinearLayout-->
-<!--            android:id="@+id/ratingAndDateContainer"-->
-<!--            android:orientation="vertical"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            -->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/movieTitle"-->
-<!--            app:layout_constraintStart_toStartOf="@id/movieTitle"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/favoriteIcon" -->
-<!--            >-->
         <LinearLayout
             android:id="@+id/movieRating"
             android:orientation="horizontal"

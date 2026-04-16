@@ -57,14 +57,10 @@ public class SimilarMoviesAdapter extends ListAdapter<MovieUi, SimilarMoviesAdap
                     .apply(new RequestOptions().placeholder(R.drawable.loading))
                     .into(binding.similarMoviePoster);
 
-//            binding.similarMovieTitle.setText(movie.getTitle());
-//            binding.similarMovieDate.setText(formatDate(movie.getReleaseDate()));
-
             binding.getRoot().setOnClickListener(v -> {
                 itemClickListener.onItemClick(movie.getId());
             });
-//            binding.getRoot().setOnClickListener(null);
-//            binding.getRoot().setClickable(false);
+
         }
     }
 

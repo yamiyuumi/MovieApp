@@ -32,14 +32,6 @@ public class MovieEntity {
     @ColumnInfo(name = "release_date")
     private String releaseDate;
 
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
     // Constructor
     public MovieEntity(int id, String title, String overview, String posterPath, double voteAverage, boolean isFavorite, String backdropPath,String releaseDate) {
         this.id = id;
@@ -89,6 +81,11 @@ public class MovieEntity {
         return posterPath;
     }
 
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
@@ -108,5 +105,10 @@ public class MovieEntity {
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
 }
 

@@ -40,14 +40,6 @@ public class GetMoviesUseCase {
         );
     }
 
-//    public Single<List<MovieUi>> getFavoriteMoviesOffline(){
-//        return repository.getFavoritesSingle()
-//                .map(movieEntities ->
-//                    movieEntities.stream()
-//                            .map(MovieEntityMapper::mapToMovieUi)
-//                            .collect(java.util.stream.Collectors.toList())
-//                );
-//    }
 
     /**
      * Triggers network refresh. Returns Completable so the ViewModel

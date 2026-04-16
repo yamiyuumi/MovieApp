@@ -36,10 +36,6 @@ public interface MovieDao {
     LiveData<List<MovieEntity>> getFavorites();
 
 
-    //offline
-//    @Query("SELECT * FROM movie_db WHERE is_favorite = 1")
-//    Single<List<MovieEntity>> getFavoritesSingle();
-
     @Delete
     void delete(MovieEntity movie);
 

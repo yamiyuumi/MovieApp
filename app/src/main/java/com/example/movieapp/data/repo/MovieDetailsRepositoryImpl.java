@@ -28,11 +28,6 @@ public class MovieDetailsRepositoryImpl implements MovieDetailsRepository {
         this.movieDBRepository = movieDBRepository;
     }
 
-//    @Override
-//    public Single<DetailsBasicUi> getMovieById(Integer movie_id) {
-//        return apiService.getMovieById(movie_id)
-//                .map(MovieMapper::mapToUiModel);
-//    }
     @Override
     public Single<DetailsBasicUi> getMovieById(Integer movie_id) {
         return Single.zip(

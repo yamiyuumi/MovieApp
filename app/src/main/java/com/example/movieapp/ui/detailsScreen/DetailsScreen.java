@@ -89,9 +89,6 @@ public class DetailsScreen extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putInt("MOVIE_ID", movieId);
 
-//            Navigation.findNavController(binding.getRoot())
-//                    .navigate(R.id.action_movieListFragment_to_detailsScreen, bundle);
-//        });
             Navigation.findNavController(binding.getRoot())
                     .navigate(R.id.action_detalsScreen_self, bundle);
         });
@@ -205,8 +202,6 @@ public class DetailsScreen extends Fragment {
 
         binding.releaseDate.setText(formatDate(data.getMovieDetails().getReleaseDate()));
 
-//        binding.movieRating.setRating((float) (data.getMovieDetails().getVoteAverage() / 2));
-
         bindCustomRating(data.getMovieDetails().getVoteAverage());
 
         int runtime = data.getMovieDetails().getRuntime();
@@ -279,7 +274,6 @@ public class DetailsScreen extends Fragment {
             binding.reviewsContainer.addView(reviewBlock);
         }
     }
-
     private void bindCustomRating(double voteAverage){
         int rating = (int) Math.round(voteAverage/2.0);
         ImageView[] stars = {

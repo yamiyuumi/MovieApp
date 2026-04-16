@@ -19,30 +19,5 @@
             android:scaleType="centerCrop"
             android:background="@android:color/black" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/similarMovieTitle"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:paddingStart="8dp"-->
-<!--            android:paddingTop="8dp"-->
-<!--            android:paddingEnd="8dp"-->
-<!--            android:text="Movie Title"-->
-<!--            android:textColor="@android:color/black"-->
-<!--            android:textStyle="bold"-->
-<!--            android:textSize="14sp"-->
-<!--            android:maxLines="2" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/similarMovieDate"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:paddingStart="8dp"-->
-<!--            android:paddingTop="4dp"-->
-<!--            android:paddingEnd="8dp"-->
-<!--            android:paddingBottom="10dp"-->
-<!--            android:text="14 December 2022"-->
-<!--            android:textColor="#666666"-->
-<!--            android:textSize="12sp" />-->
-
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

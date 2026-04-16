@@ -21,8 +21,6 @@ public class MovieRemote {
     @SerializedName("backdrop_path")
     private String backdropPath;
 
-
-
     @SerializedName("release_date")
     private String releaseDate;
 
@@ -42,10 +40,6 @@ public class MovieRemote {
 
     public String getBackdropPath() {
         return backdropPath;
-    }
-
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
     }
 
     // Getters and Setters
@@ -103,5 +97,9 @@ public class MovieRemote {
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
 }
 
