@@ -9,7 +9,7 @@
     android:layout_margin="16dp"
     app:cardCornerRadius="30dp"
     app:cardElevation="8dp"
-    app:strokeColor="#F2B233"
+    app:strokeColor="@color/orangish"
     app:strokeWidth="4dp"
     android:background="@color/white">
 
@@ -119,6 +119,8 @@
             android:src="@drawable/ic_favorite_unselect"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

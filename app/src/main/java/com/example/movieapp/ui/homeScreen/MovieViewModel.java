@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -82,6 +83,7 @@ public class MovieViewModel extends ViewModel {
 
         disposables.add(
                 getMoviesUseCase.refresh()
+                        .delay(1, TimeUnit.SECONDS)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(

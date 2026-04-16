@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.movieapp.R;
 import com.example.movieapp.common.NetworkUtils;
 import com.example.movieapp.databinding.FragmentMovieBinding;
+import com.example.movieapp.databinding.ItemMovieSkeletonBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -79,19 +80,33 @@ public class MovieListFragment extends Fragment {
         viewModel.movies.observe(getViewLifecycleOwner(), movies -> {
             adapter.submitList(movies);
             boolean isOffline = !NetworkUtils.isOnline(requireContext());
+            boolean isEmpty = movies == null || movies.isEmpty();
+            boolean isLoading = Boolean.TRUE.equals(viewModel.isLoading.getValue());
 
-            if(isOffline &&(movies == null || movies.isEmpty())){
+            if(isOffline && isEmpty){
                 binding.emptyView.setVisibility(View.VISIBLE);
                 binding.recyclerView.setVisibility(View.GONE);
+                binding.skeletonLayout.setVisibility(View.GONE);
             } else {
                 binding.emptyView.setVisibility(View.GONE);
-                binding.recyclerView.setVisibility(View.VISIBLE);
+                if(!isLoading){
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                }
             }
         });
 
         viewModel.isLoading.observe(getViewLifecycleOwner(), isLoading -> {
-            binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+//            binding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
             binding.swipeRefreshLayout.setRefreshing(isLoading);
+
+            if(isLoading) {
+                binding.skeletonLayout.setVisibility(View.VISIBLE);
+                binding.recyclerView.setVisibility(View.GONE);
+                binding.emptyView.setVisibility(View.GONE);
+            }else{
+                binding.skeletonLayout.setVisibility(View.GONE);
+                binding.recyclerView.setVisibility(View.VISIBLE);
+            }
         });
 
 
